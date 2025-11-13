@@ -3,44 +3,12 @@
 
 import Foundation
 
-enum KeychainError: Error, LocalizedError {
-    case invalidData
-    case saveFailed
-    case itemNotFound
-    case retrievalFailed
-    case deleteFailed
-    
-    var errorDescription: String? {
-        switch self {
-        case .invalidData:
-            return "Unable to form string from data using utf8"
-            
-        case .saveFailed:
-            return "Unable to save to keychain"
-            
-        case .itemNotFound:
-            return "Item cannot be found"
-            
-        case .retrievalFailed:
-            return "Keychain retrieval failed"
-            
-        case .deleteFailed:
-            return "Unable to delete from keychain"
-        }
-    }
-}
-
-// TODO: use protocol containing service: String?, accessGroup: String?
-public class Keychain {
-    public static let shared = Keychain()
-    
-    private init() {}
-
-    public enum KeychainIdentifier: String {
-        case authToken = "JustinLee.HSD.keys.authToken"
+public class Keychain: Keychainable {
+    public enum Identifier: String {
+        case authToken = "JustinLee.Mila.keys.authToken"
     }
 
-    public func update(id: KeychainIdentifier, stringData: String) throws {
+    public func update(id: Identifier = .authToken, stringData: String) throws {
         guard let data = stringData.data(using: .utf8) else {
             throw KeychainError.invalidData
         }
@@ -56,7 +24,7 @@ public class Keychain {
         }
     }
     
-    private func add(id: KeychainIdentifier, data: Data) throws {
+    private func add(id: Identifier, data: Data) throws {
         var query: [String: Any] = [:]
         query[kSecClass as String] = kSecClassGenericPassword
         query[kSecAttrService as String] = id.rawValue
@@ -68,8 +36,7 @@ public class Keychain {
         }
     }
 
-    public func get(id: KeychainIdentifier) throws -> String {
-
+    public func get(id: Identifier = .authToken) throws -> String {
         guard let data = try? data(id: id) else {
             throw KeychainError.itemNotFound
         }
@@ -81,7 +48,7 @@ public class Keychain {
         return value
     }
 
-    private func data(id: KeychainIdentifier) throws -> Data {
+    private func data(id: Identifier) throws -> Data {
         var query: [String: Any] = [:]
         query[kSecClass as String] = kSecClassGenericPassword
         query[kSecAttrService as String] = id.rawValue
@@ -105,7 +72,7 @@ public class Keychain {
         return resultData
     }
 
-    public func delete(id: KeychainIdentifier) throws {
+    public func delete(id: Identifier = .authToken) throws {
         var query: [String: Any] = [:]
         query[kSecClass as String] = kSecClassGenericPassword
         query[kSecAttrService as String] = id.rawValue
