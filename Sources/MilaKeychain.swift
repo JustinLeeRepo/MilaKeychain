@@ -7,6 +7,10 @@ public class Keychain: Keychainable {
     public enum Identifier: String {
         case authToken = "JustinLee.Mila.keys.authToken"
     }
+    
+    public init() {
+        
+    }
 
     public func update(id: Identifier = .authToken, stringData: String) throws {
         guard let data = stringData.data(using: .utf8) else {
