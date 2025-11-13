@@ -5,7 +5,7 @@
 import Foundation
 
 public class Keychain: Keychainable {
-    init() {
+    public init() {
         
     }
 
