@@ -4,39 +4,6 @@
 
 import Foundation
 
-enum KeychainError: Error, LocalizedError {
-    case invalidData
-    case saveFailed
-    case itemNotFound
-    case retrievalFailed
-    case deleteFailed
-    
-    var errorDescription: String? {
-        switch self {
-        case .invalidData:
-            return "Unable to form string from data using utf8"
-            
-        case .saveFailed:
-            return "Unable to save to keychain"
-            
-        case .itemNotFound:
-            return "Item cannot be found"
-            
-        case .retrievalFailed:
-            return "Keychain retrieval failed"
-            
-        case .deleteFailed:
-            return "Unable to delete from keychain"
-        }
-    }
-}
-
-public protocol Keychainable {
-    func update(id: String, stringData: String) throws
-    func get(id: String) throws -> String
-    func delete(id: String) throws
-}
-
 public class Keychain: Keychainable {
     init() {
         
