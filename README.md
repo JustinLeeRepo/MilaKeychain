@@ -1,3 +1,5 @@
 # MilaKeychain
 
-## A reusable keychain library
+## Reusable keychain library
+
+Supports iOS v17, Swift 5.9
